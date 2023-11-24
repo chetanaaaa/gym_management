@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.5.2
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Jun 02, 2022 at 06:18 PM
--- Server version: 5.6.21
--- PHP Version: 5.6.3
+-- Host: 127.0.0.1:3310
+-- Generation Time: Nov 24, 2023 at 08:01 PM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.0.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -31,14 +32,14 @@ CREATE TABLE `admin` (
   `username` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL,
   `name` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `admin`
 --
 
 INSERT INTO `admin` (`user_id`, `username`, `password`, `name`) VALUES
-(2, 'admin', 'f2d0ff370380124029c2b807a924156c', 'admin');
+(2, 'admin', 'admin', 'admin');
 
 -- --------------------------------------------------------
 
@@ -50,17 +51,17 @@ CREATE TABLE `announcements` (
   `id` int(11) NOT NULL,
   `message` varchar(100) NOT NULL,
   `date` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `announcements`
 --
 
 INSERT INTO `announcements` (`id`, `message`, `date`) VALUES
-(7, 'This is to announce that our GYM will remain close for 51 days due to COVID-19.', '2020-03-30'),
-(8, 'Opening of GYM Halls and Clubs are not fixed yet. Stay tuned for more updates!!', '2020-04-03'),
-(9, 'Renovation Going On...', '2020-04-04'),
-(10, 'This is a demo announcement from admin', '2022-06-03');
+(11, 'The Gym is closed tomorrow due to Diwali', '2023-11-13'),
+(12, 'gym is under maintainance for another two days', '2023-11-17'),
+(13, 'tomorrow holiday!!!!', '2023-11-23'),
+(14, 'gym will remain closed tomorrow on account of durga pooja', '2023-11-24');
 
 -- --------------------------------------------------------
 
@@ -74,7 +75,15 @@ CREATE TABLE `attendance` (
   `curr_date` text NOT NULL,
   `curr_time` text NOT NULL,
   `present` tinyint(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `attendance`
+--
+
+INSERT INTO `attendance` (`id`, `user_id`, `curr_date`, `curr_time`, `present`) VALUES
+(22, '23', '2023-11-20', '10:43 PM', 1),
+(41, '35', '2023-11-21', '10:42 AM', 1);
 
 -- --------------------------------------------------------
 
@@ -92,19 +101,21 @@ CREATE TABLE `equipment` (
   `address` varchar(20) NOT NULL,
   `contact` varchar(10) NOT NULL,
   `date` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `equipment`
 --
 
 INSERT INTO `equipment` (`id`, `name`, `amount`, `quantity`, `vendor`, `description`, `address`, `contact`, `date`) VALUES
-(3, 'Treadmill', 909, 4, 'DnS', 'Edited Description', '7 Cedarstone Drive', '8521479633', '2019-03-07'),
-(4, 'Vertical Press Machine', 949, 3, 'SS Industries', 'For Biceps And Triceps, Upper Back, Chest', '7 Cedarstone Drive', '1245558980', '2020-03-19'),
-(5, 'Dumbell - Adjustable', 102, 26, 'Uptown Suppliers', 'Material: Steel, Rubber Plastic, Concrete', '7 Cedarstone Drive', '9875552100', '2020-03-29'),
-(6, 'Multi Bench Press Machine', 219, 2, 'DnS Suppliers', '6 In 1 Multi Bench With Incline, Flat, Decline Ben', '7 Cedarstone Drive', '7410001010', '2020-04-05'),
-(7, 'Demo', 265, 5, 'Demo', 'This is a demo test.', '77 Demo Lane', '8524445452', '2020-04-03'),
-(10, 'RowWarrior Fitness Rowing Mach', 5616, 12, 'Roww Stores', 'HIGHEST QUALITY: This best of class air rowing mac', '52 Weekley Street', '7412585555', '2021-06-12');
+(3, 'Treadmill', 909, 4, 'Dns Suppliers', 'For fast jogging,running,to reduce waste drastical', 'Hubli', '8521479633', '2019-03-07'),
+(4, 'Vertical Press Machine', 949, 3, 'SS Industries', 'For Biceps And Triceps, Upper Back, Chest', 'Kerala', '1245558980', '2020-03-19'),
+(5, 'Dumbell - Adjustable', 102, 26, 'Uptown Suppliers', 'Material: Steel, Rubber Plastic, Concrete', 'Andhra', '9875552100', '2020-03-29'),
+(6, 'Multi Bench Press Machine', 219, 2, 'DnS Suppliers', '6 In 1 Multi Bench With Incline, Flat, Decline Ben', 'Delhi', '7410001010', '2020-04-05'),
+(7, 'protoner rods', 1325, 5, 'SSS', 'For weight lifting', 'Hubli', '8524445452', '2023-06-03'),
+(10, 'Fitness Rowing Mach', 5616, 12, 'Roww Stores', 'HIGHEST QUALITY: This best of class air rowing mac', 'Bangalore', '7412585555', '2021-06-12'),
+(11, 'dumbell', 5103, 3, 'sss', 'For weight lifting', 'rrr', '8976545657', '2023-11-23'),
+(12, 'dumbell', 900, 3, 'Stones and drills', 'For weight lifting', 'kochi', '8765435679', '2023-11-29');
 
 -- --------------------------------------------------------
 
@@ -128,36 +139,30 @@ CREATE TABLE `members` (
   `contact` varchar(10) NOT NULL,
   `status` varchar(20) NOT NULL DEFAULT 'Active',
   `attendance_count` int(100) NOT NULL,
-  `ini_weight` int(100) NOT NULL DEFAULT '0',
-  `curr_weight` int(100) NOT NULL DEFAULT '0',
+  `ini_weight` int(100) NOT NULL DEFAULT 0,
+  `curr_weight` int(100) NOT NULL DEFAULT 0,
   `ini_bodytype` varchar(50) NOT NULL,
   `curr_bodytype` varchar(50) NOT NULL,
   `progress_date` date NOT NULL,
-  `reminder` int(11) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `reminder` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `members`
 --
 
 INSERT INTO `members` (`user_id`, `fullname`, `username`, `password`, `gender`, `dor`, `services`, `amount`, `paid_date`, `p_year`, `plan`, `address`, `contact`, `status`, `attendance_count`, `ini_weight`, `curr_weight`, `ini_bodytype`, `curr_bodytype`, `progress_date`, `reminder`) VALUES
-(6, 'Harry Denn', 'harry', 'cac29d7a34687eb14b37068ee4708e7b', 'Male', '2019-12-25', 'Fitness', 165, '2022-06-02', 2021, '3', '64 Mulberry Lane', '8545878545', 'Active', 4, 54, 62, 'Slim', 'Buffed', '2020-04-22', 0),
-(8, 'Charles Anderson', 'charles', 'cac29d7a34687eb14b37068ee4708e7b', 'Male', '2020-01-02', 'Fitness', 55, '2020-04-01', 2020, '3', '99 Heron Way', '8520258520', 'Active', 14, 92, 85, 'Fat', 'Bulked', '2020-04-22', 1),
-(11, 'Justin Schexnayder', 'justin', 'cac29d7a34687eb14b37068ee4708e7b', 'Male', '2019-01-25', 'Cardio', 35, '2020-03-31', 2020, '3', '14 Blair Court', '7535752220', 'Active', 9, 0, 0, '', '', '0000-00-00', 0),
-(14, 'Ryan Crowl', 'ryan', 'cac29d7a34687eb14b37068ee4708e7b', 'Male', '2019-07-13', 'Fitness', 55, '2020-04-02', 2020, '12', '34 Twin Oaks Drive', '1578880010', 'Active', 13, 59, 63, 'Slim', 'Slim', '2020-04-23', 0),
-(16, 'TrialsChanged', 'trials', 'cac29d7a34687eb14b37068ee4708e7b', 'Female', '2020-04-01', 'Fitness', 0, '2021-06-12', 2021, '0', '4 Demo Lane', '741111110', 'Expired', 26, 50, 61, 'Slim', 'Slim', '2021-06-11', 1),
-(17, 'Karen McGray', 'karen', 'cac29d7a34687eb14b37068ee4708e7b', 'Female', '2020-04-02', 'Cardio', 120, '2022-05-31', 2020, '3', '23 Rubaiyat Road', '7441002540', 'Active', 12, 0, 0, '', '', '0000-00-00', 0),
-(18, 'Jeanne Pratt', 'prattj', 'cac29d7a34687eb14b37068ee4708e7b', 'Female', '2020-04-04', 'Fitness', 55, '2021-06-11', 2021, '1', '86 Hilltop Street', '7854445410', 'Active', 11, 0, 0, '', '', '0000-00-00', 0),
-(19, 'George Fann', 'george', 'cac29d7a34687eb14b37068ee4708e7b', 'Male', '2019-04-02', 'Fitness', 55, '2021-06-11', 2021, '1', '43 Oak Drive', '0258987850', 'Active', 22, 0, 0, '', '', '0000-00-00', 1),
-(20, 'Wendy Scott', 'wendy', 'cac29d7a34687eb14b37068ee4708e7b', 'Female', '2020-03-21', 'Fitness', 55, '2021-06-11', 2021, '1', '24 Cody Ridge Road', '8547896520', 'Active', 18, 0, 0, '', '', '0000-00-00', 0),
-(21, 'Patrick Wilson', 'patrick', 'cac29d7a34687eb14b37068ee4708e7b', 'Male', '2020-04-02', 'Cardio', 120, '2022-06-01', 2021, '3', '24 Cody Ridge Road', '9874568520', 'Active', 11, 0, 0, '', '', '0000-00-00', 0),
-(22, 'Tommy Marks', 'tommy', 'cac29d7a34687eb14b37068ee4708e7b', 'Male', '2020-04-01', 'Fitness', 55, '2020-04-05', 2020, '3', '22 Franklin Street', '8529997500', 'Active', 7, 0, 0, '', '', '0000-00-00', 0),
-(23, 'Keith Martin', 'martin', 'cac29d7a34687eb14b37068ee4708e7b', 'Male', '2020-04-02', 'Cardio', 120, '2022-06-02', 2021, '3', '89 Smithfield Avenue', '7895456250', 'Active', 24, 51, 68, 'Slim', 'Muscular', '2022-06-02', 0),
-(24, 'Richard G Langston', 'richard', 'cac29d7a34687eb14b37068ee4708e7b', 'Male', '1990-02-02', 'Sauna', 420, '2022-05-31', 2022, '12', '541  Raoul Wallenber', '7012545580', 'Active', 1, 0, 0, '', '', '0000-00-00', 0),
-(25, 'Raymond Ledesma', 'raymond', 'cac29d7a34687eb14b37068ee4708e7b', 'Male', '1986-02-19', 'Cardio', 480, '2022-06-02', 2022, '12', '2954  Robinson Lane', '4785450002', 'Active', 2, 0, 0, '', '', '0000-00-00', 0),
-(26, 'Mattie F. Maher', 'mattie', 'cac29d7a34687eb14b37068ee4708e7b', 'Female', '1995-05-18', 'Sauna', 420, '2022-06-01', 2022, '12', '73 Settlers Lane', '9995554444', 'Active', 0, 0, 0, '', '', '0000-00-00', 0),
-(27, 'Justin C. Lusk', 'justin', 'cac29d7a34687eb14b37068ee4708e7b', 'Male', '1995-12-12', 'Cardio', 40, '2022-05-30', 2022, '1', '45 Bell Street', '3545785540', 'Active', 1, 0, 0, '', '', '0000-00-00', 0),
-(29, 'Kathy J. Glennon', 'kathy', 'cac29d7a34687eb14b37068ee4708e7b', 'Female', '2022-06-02', 'Fitness', 330, '2022-06-02', 0, '6', '87 Harry Place', '7896587458', 'Active', 0, 0, 0, '', '', '0000-00-00', 0);
+(6, 'Prajath', 'praj', 'cac29d7a34687eb14b37068ee4708e7b', 'Male', '2019-12-25', 'Fitness', 165, '2022-06-02', 2021, '3', 'Udupi', '8545878545', 'Active', 4, 54, 62, 'Slim', 'Buffed', '2023-11-23', 0),
+(19, 'Sam', 'sam', 'cac29d7a34687eb14b37068ee4708e7b', 'Male', '2019-04-02', 'Fitness', 55, '2021-06-11', 2021, '1', 'Delhi', '0258987850', 'Active', 23, 0, 0, '', '', '0000-00-00', 1),
+(31, 'Pranathi', 'prani', '81dc9bdb52d04dc20036dbd8313ed055', 'Female', '2023-11-20', 'Fitness', 55, '2023-11-21', 2023, '1', 'Banshankri', '9876543211', 'Active', 0, 50, 45, 'slim', 'fit', '2023-11-21', 0),
+(32, 'Namrata', 'nams', '81dc9bdb52d04dc20036dbd8313ed055', 'Female', '2023-11-06', 'Cardio', 1440, '2023-11-20', 2023, '12', 'Kumta', '68993456', 'Active', 5, 0, 0, '', '', '0000-00-00', 0),
+(33, 'Gayathri', 'Gayu', '81dc9bdb52d04dc20036dbd8313ed055', 'Female', '2023-11-03', 'Sauna', 35, '2023-11-21', 2023, '1', 'HSR layout', '987654357', 'Active', 2, 60, 58, 'moderate', '', '2023-11-20', 0),
+(34, 'Nived', 'nivis', '81dc9bdb52d04dc20036dbd8313ed055', 'Male', '2023-10-18', 'Cardio', 40, '2023-11-23', 2023, '1', 'Mangalore', '547686543', 'Expired', 3, 82, 70, 'bulk', 'fit', '2023-11-20', 0),
+(35, 'Praakhya', 'praakhya', '81dc9bdb52d04dc20036dbd8313ed055', 'Female', '2023-11-14', 'Sauna', 420, '2023-11-20', 2023, '6', 'Andhra', '876546789', 'Active', 3, 45, 60, 'slim', 'fit', '2023-11-20', 0),
+(36, 'Tilak', 'tilak', '81dc9bdb52d04dc20036dbd8313ed055', 'Male', '2023-11-12', 'Sauna', 1080, '2023-11-20', 2023, '12', 'Ambalpady', '8722981409', 'Active', 5, 0, 0, '', '', '0000-00-00', 1),
+(37, 'neha', 'neha', '81dc9bdb52d04dc20036dbd8313ed055', 'Female', '2023-11-23', 'Fitness', 165, '2023-11-23', 2023, '3', 'Banshankri', '7865879878', 'Active', 0, 0, 0, '', '', '0000-00-00', 0),
+(38, 'Prams', 'Prams', 'c5f7a9549f074c11d0df48dd906209ae', 'Female', '2023-11-23', 'Sauna', 35, '2023-11-23', 0, '1', 'RR', '123456789', 'Active', 0, 0, 0, '', '', '0000-00-00', 0),
+(39, 'lila', 'lila', '81dc9bdb52d04dc20036dbd8313ed055', 'Female', '2023-11-25', 'Fitness', 165, '2023-11-24', 2023, '3', 'bijapur', '98765567', 'Active', 0, 0, 0, '', '', '0000-00-00', 0);
 
 -- --------------------------------------------------------
 
@@ -169,7 +174,7 @@ CREATE TABLE `rates` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `charge` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `rates`
@@ -193,7 +198,7 @@ CREATE TABLE `reminder` (
   `status` text NOT NULL,
   `date` datetime NOT NULL,
   `user_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `reminder`
@@ -221,17 +226,19 @@ CREATE TABLE `staffs` (
   `designation` varchar(20) NOT NULL,
   `gender` varchar(10) NOT NULL,
   `contact` int(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `staffs`
 --
 
 INSERT INTO `staffs` (`user_id`, `username`, `password`, `email`, `fullname`, `address`, `designation`, `gender`, `contact`) VALUES
-(1, 'bruno', 'cac29d7a34687eb14b37068ee4708e7b', 'brunoden@mail.com', 'Bruno Den', '26 Morris Street', 'Cashier', 'Male', 852028120),
-(2, 'michelle', 'cac29d7a34687eb14b37068ee4708e7b', 'michelle@mail.com', 'Michelle R. Lane', '61 Stone Lane', 'Trainer', 'Female', 2147483647),
-(3, 'james', 'cac29d7a34687eb14b37068ee4708e7b', 'jamesb@mail.com', 'James Brown', '12 Deer Ridge Drive', 'Trainer', 'Male', 2147483647),
-(4, 'bruce', 'cac29d7a34687eb14b37068ee4708e7b', 'bruce@mail.com', 'Bruce H. Klaus', '68 Lake Floyd Circle', 'Manager', 'Male', 1458887788);
+(2, 'michelle', 'cac29d7a34687eb14b37068ee4708e7b', 'michelle@mail.com', 'Michelle R. Lane', 'Bangalore', 'Trainer', 'Female', 2147483647),
+(5, 'bhavana', '81dc9bdb52d04dc20036dbd8313ed055', 'bhavanahugar@gmail.com', 'Bhavana', 'Indi', 'Cashier', 'Female', 2147483647),
+(6, 'sankalp', '81dc9bdb52d04dc20036dbd8313ed055', 'idylliciconik@gmail.com', 'Sankalp', 'Chennai', 'Front Desk Staff', 'Male', 987654309),
+(7, 'prajna', '81dc9bdb52d04dc20036dbd8313ed055', 'prajna@gmail.com', 'Prajna', 'Mumbai', 'Trainer', 'Female', 2147483647),
+(8, 'chets', '81dc9bdb52d04dc20036dbd8313ed055', 'chetana@gmail.com', 'chetana', 'Madanpalli', 'Manager', 'Female', 98765432),
+(9, 'mike', '81dc9bdb52d04dc20036dbd8313ed055', 'mike@hotmail.com', 'Mike', 'Mangalore', 'GYM Assistant', 'Male', 2147483647);
 
 -- --------------------------------------------------------
 
@@ -244,20 +251,16 @@ CREATE TABLE `todo` (
   `task_status` varchar(50) NOT NULL,
   `task_desc` varchar(30) NOT NULL,
   `user_id` int(7) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `todo`
 --
 
 INSERT INTO `todo` (`id`, `task_status`, `task_desc`, `user_id`) VALUES
-(20, 'In Progress', 'Test Completed', 14),
-(21, 'Pending', 'Mastering Crunches', 6),
-(22, 'In Progress', 'Standing Workouts For Flat Abs', 6),
-(23, 'In Progress', 'Triceps Buildup - 3 set', 14),
-(24, 'Pending', 'Decline dumbbell bench press', 6),
-(27, 'Pending', 'dddd', 0),
-(28, 'In Progress', 'Test 1', 23);
+(31, 'In Progress', 'I will do morning jogging', 36),
+(32, 'In Progress', 'protien rich foods,balanced nu', 34),
+(33, 'In Progress', '100 push-ups everyday', 36);
 
 --
 -- Indexes for dumped tables
@@ -326,46 +329,56 @@ ALTER TABLE `todo`
 --
 ALTER TABLE `admin`
   MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
 --
 -- AUTO_INCREMENT for table `announcements`
 --
 ALTER TABLE `announcements`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
 --
 -- AUTO_INCREMENT for table `attendance`
 --
 ALTER TABLE `attendance`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+
 --
 -- AUTO_INCREMENT for table `equipment`
 --
 ALTER TABLE `equipment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
 --
 -- AUTO_INCREMENT for table `members`
 --
 ALTER TABLE `members`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+
 --
 -- AUTO_INCREMENT for table `rates`
 --
 ALTER TABLE `rates`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
 --
 -- AUTO_INCREMENT for table `reminder`
 --
 ALTER TABLE `reminder`
   MODIFY `id` int(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
 --
 -- AUTO_INCREMENT for table `staffs`
 --
 ALTER TABLE `staffs`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
 --
 -- AUTO_INCREMENT for table `todo`
 --
 ALTER TABLE `todo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+COMMIT;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
