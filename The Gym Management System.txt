@@ -1,5 +1,6 @@
 The Gym Management System is designed to efficiently manage daily records for a gym facility. It encompasses a comprehensive set of features for both administrators and users, including customers and staff members. The system focuses on tracking customer activities, managing equipment, handling payments, and providing valuable insights through reporting.
 
+
 Functional Features
 Admin panel:
 Manage customer registrations and approval process.
@@ -9,6 +10,7 @@ Create and manage staff members with detailed information.
 Send notifications to customers regarding fees due.
 Set and manage gym announcements to communicate with customers.
 
+
 Customer Panel:
 Register for gym services with approval from the admin.
 Manage personal to-do lists to keep track of activities.
@@ -16,6 +18,7 @@ View gym announcements and notifications from the admin.
 Monitor personal progress by providing initial and current weight/body type.
 Access payment plans and make payments online.
 Download payment receipts and manage notification preferences.
+
 
 Staff Panel:
 View overall records on the number of members, total earnings, and equipment status.
